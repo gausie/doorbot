@@ -1,0 +1,22 @@
+div(ng-controller='LogsCtrl',data-ng-init="load()")
+
+  h1 Logs
+
+  div.text-center
+    div(data-pagination,data-ng-model="page",data-total-items="total",data-items-per-page="limit",data-max-size="10")
+
+  div(data-ng-repeat="row in rows")
+    h4
+      i.fa.fa-calendar
+      |  {{row.day | amDateFormat:'Do MMMM YYYY'}}
+    ul.list-group
+      li.list-group-item(data-ng-repeat="log in row.logs")
+        a(data-ng-if="log.Card !== null",data-ng-bind="log.Card.User.name",data-ng-href="/users/{{log.Card.User.id}}")
+        a(data-ng-if="log.Card === null",data-ng-href="/cards/add/{{log.CardUid}}")
+          code(data-ng-bind="log.CardUid")
+        |  was&nbsp;
+        span.label(data-ng-class="{ 'label-success': log.status === 'approved', 'label-danger': log.status === 'denied'}",data-ng-bind="log.status")
+        |  access at <i class="fa fa-clock-o"></i> {{log.createdAt | amDateFormat:'H:s'}}.
+
+  div.text-center
+    div(data-pagination,data-ng-model="page",data-total-items="total",data-items-per-page="limit",data-max-size="10")

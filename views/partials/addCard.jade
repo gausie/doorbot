@@ -1,0 +1,11 @@
+div(data-ng-controller='AddCardCtrl')
+
+  p
+    | To add&nbsp;
+    code(data-ng-bind='newCard')
+    |  either fill in the details off a new user below or add to an&nbsp;
+    select
+      option existing user
+    | .
+
+  div(data-ng-include="'/partials/user/'")

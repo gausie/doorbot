@@ -1,0 +1,59 @@
+div(data-ng-controller='UserCtrl',data-ng-init='checkInherited()')
+
+	h1(data-ng-if="!newCard") {{user.name}}
+
+	form.form(role="form",data-ng-submit="submit()")
+		div.row
+			div.col-md-6
+				.form-group
+					label(for='name') Name
+					input.form-control(type='text',name='name',data-ng-model='user.name',placeholder='Name')
+				.form-group
+					label(for='email') Email Address
+					input.form-control(type='email',name='email',data-ng-model='user.email',placeholder='Email Address')
+				.checkbox
+					label
+						input(type='checkbox',name='resident',data-ng-model="user.resident")
+						| Resident
+					span.help-block
+						i.fa.fa-question-circle
+						|  Entry by residents will not be reported to anyone who has notifications switched on.
+				.checkbox
+					label
+						input(type='checkbox',name='notify',data-ng-model="user.notify")
+						| Notify
+					span.help-block
+						i.fa.fa-question-circle
+						|  Receive emails whenever someone who is not a resident opens the door.
+				.checkbox
+					label
+						input(type='checkbox',name='enabled',data-ng-model="user.enabled",checked)
+						| Enabled
+					span.help-block
+						i.fa.fa-question-circle
+						|  Only enabled users can open the door.
+
+				.form-inline
+					button.btn(type="submit",data-ng-class="{ 'btn-primary': save.status === 0, 'btn-success': save.status === 1, 'btn-danger': save.status === -1 }")
+						i.fa.fa-save
+						|  {{save.message}}
+					button.btn.btn-danger(type="button",data-ng-click="delete()",data-ng-if="user.id")
+						i.fa.fa-trash
+
+			div.col-md-6
+				label Cards
+				ul.list-group
+					li.list-group-item(data-ng-repeat="card in user.Cards")
+						.form-inline
+							div.form-group
+								.input-group
+									.input-group-addon(style="background-color:{{ card.uid | colour }};")
+										i.fa.fa-credit-card
+									input.form-control(name="description-{{$index}}",type="text",placeholder="Description",data-ng-model="card.description")
+							div.form-group
+								input.form-control(name="uid-{{$index}}",placeholder="Card ID",type="text",data-ng-model="card.uid")
+							button.btn(type="button",data-ng-click="removeCard(card)")
+								i.fa.fa-trash
+				button.btn(type="button",data-ng-click="addCard()")
+					i.fa.fa-plus
+					|  Add a card

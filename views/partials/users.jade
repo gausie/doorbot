@@ -1,0 +1,40 @@
+div(ng-controller='UsersCtrl')
+
+  h1 Users
+
+  p
+    a.btn.btn-default(href='/users/add')
+      i.fa.fa-plus
+      |  Add a user
+
+  ul.list-group
+    li.list-group-item(data-ng-repeat="user in users | filter:{ enabled: true }")
+      span.badge
+        i.fa.fa-rss&nbsp;
+        span(data-ng-bind="user.CardCount")
+      span.badge(data-ng-if="user.resident")
+        i.fa.fa-home
+      span.badge(data-ng-if="user.notify")
+        i.fa.fa-envelope
+      a(data-ng-bind="user.name",data-ng-href="/users/{{user.id}}")
+
+  h3 Deactivated
+
+  ul.list-group
+    li.list-group-item.disabled(data-ng-repeat="user in users | filter:{ enabled: false }")
+      span.badge
+        i.fa.fa-rss&nbsp;
+        span(data-ng-bind="user.CardCount")
+      span.badge(data-ng-if="user.resident")
+        i.fa.fa-home
+      span.badge(data-ng-if="user.notify")
+        i.fa.fa-envelope
+      a(data-ng-bind="user.name",data-ng-href="/users/{{user.id}}")
+
+  p.small
+    i.fa.fa-rss
+    |  = number of cards,&nbsp;
+    i.fa.fa-home
+    |  = lives here,&nbsp;
+    i.fa.fa-envelope
+    |  = emailed when non-resident enters

@@ -1,0 +1,13 @@
+/* app css stylesheet */
+
+/* Some breathing space at the top on desktop browsers */
+@media (min-width: 979px) {
+    body {
+        padding-top: 40px;
+    }
+}
+
+/* Spacing between elements in an inline form */
+.form-inline > * {
+    margin: 0 2px;
+}
