@@ -9,8 +9,8 @@ var _ = require('lodash');
 
 router.get('/users', function(req, res, next) {
   models.User.findAll({
-    attributes: ['id', 'name', 'email', 'resident', 'notify', 'enabled', [sequelize.fn('COUNT', 'Card.id'), 'CardCount']],
-    group: 'User.id',
+    attributes: ['id', 'name', 'email', 'resident', 'notify', 'enabled', [sequelize.fn('COUNT', sequelize.col('Cards.uid')), 'CardCount']],
+    group: [sequelize.col('User.id')],
     include: [{
       model: models.Card,
       attributes: []
@@ -24,17 +24,19 @@ router.get('/users/:user', function(req, res) {
   models.User.find({
     where: { id: req.params.user },
     include: [ models.Card ]
-  }).success(function(users) {
+  }).then(function(users) {
     res.json(users);
-  }).error(function(err) {
+  }).catch(function(err) {
     next(err);
   });
 });
 
 router.post('/users/', function(req, res, next) {
-  models.User.build(req.body).save().success(function(user) {
+  models.User.create(req.body, {
+    include: [ models.Card ]
+  }).then(function(user) {
     res.json(user);
-  }).error(function(err) {
+  }).catch(function(err) {
     next(err);
   });
 });
@@ -44,7 +46,9 @@ router.delete('/users/:user', function(req, res, next) {
   models.User.find(UserId).success(function(user) {
     user.destroy().success(function() {
       models.Card.destroy({
-        UserId: UserId
+        where: {
+          UserId: UserId
+        }
       }).success(function() {
         res.send('deleted');
       })
@@ -56,23 +60,8 @@ router.put('/users/:user', function(req, res, next) {
   models.User.find({
     where: { id: req.params.user },
     include: [ models.Card ]
-  }).then(function (users) {
-    var attributes = _.clone(req.body);
-    delete attributes.Cards;
-    return users.updateAttributes(attributes);
-  }).then(function(results) {
-
-    // Delete cards for this user
-    models.Card.destroy({
-      where: { UserId: req.params.user }
-    });
-
-    // Add the cards in the form
-    req.body.Cards.forEach(function(card) {
-      card.UserId = req.params.user;
-      models.Card.create(card);
-    });
-
+  }).then(function (user) {
+    return user.updateAttributes(req.body);
   }).then(function (results) {
     res.json(results);
   }).catch(function (err) {

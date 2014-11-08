@@ -29,7 +29,7 @@ angular.module('myApp.controllers', []).
     if ($routeParams.id) {
       $scope.user = Users.get({
         id: $routeParams.id
-      }).success(function() {
+      }, function() {
         $scope.checkInherited();
       });
     }
@@ -63,6 +63,7 @@ angular.module('myApp.controllers', []).
     };
 
     $scope.submit = function () {
+
       $scope.save = {
         status: 0,
         message: 'Saving'
