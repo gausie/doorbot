@@ -19,7 +19,9 @@ angular.module('myApp.controllers', []).
   }).
   controller('UserCtrl', function ($scope, $routeParams, $location, Users) {
 
-    $scope.user = new Users({ enabled: true });
+    if (!$scope.user) {
+      $scope.user = new Users({ enabled: true });
+    }
 
     $scope.save = {
       status: 0,
@@ -45,6 +47,9 @@ angular.module('myApp.controllers', []).
       if($scope.user.Cards && $scope.user.Cards.length > 0) {
         var prev = $scope.user.Cards[$scope.user.Cards.length-1];
         if(!prev.uid && !prev.description) {
+          return;
+        }
+        if (uid && $scope.some($scope.user.Cards, { uid: uid })) {
           return;
         }
       }else{
@@ -96,15 +101,44 @@ angular.module('myApp.controllers', []).
       });
     };
 
+    $scope.$watch('addcard.user', function(user) {
+      if (user) {
+        $scope.user = user;
+        $scope.checkInherited();
+        $scope.disabled = true;
+      } else {
+        $scope.user = {};
+        $scope.checkInherited();
+        $scope.disabled = false;
+      }
+    });
+
+
   }).
   controller('UsersCtrl', function ($scope, Users) {
 
-    $scope.users = Users.query();
+    $scope.users = Users.query({
+      summary: true
+    });
 
   }).
   controller('AddCardCtrl', function ($scope, $routeParams, Users) {
 
+    $scope.addcard = {};
+
     $scope.newCard = $routeParams.uid;
+
+    $scope.users = [];
+
+    $scope.clear = function () {
+      $scope.addcard.user = null;
+    };
+
+    $scope.refreshUsers = function(name) {
+      $scope.users = Users.query({
+        name: name
+      });
+    };
 
   }).
   controller('LogsCtrl', function ($scope, Logs) {

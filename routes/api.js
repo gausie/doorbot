@@ -8,16 +8,41 @@ var router = express.Router();
 var _ = require('lodash');
 
 router.get('/users', function(req, res, next) {
-  models.User.findAll({
-    attributes: ['id', 'name', 'email', 'resident', 'notify', 'enabled', [sequelize.fn('COUNT', sequelize.col('Cards.uid')), 'CardCount']],
-    group: [sequelize.col('User.id')],
-    include: [{
-      model: models.Card,
-      attributes: []
-    }]
-  }).success(function(users) {
-    res.json(users);
-  });
+
+  if (req.query.summary !== undefined ) {
+
+    models.User.findAll({
+      where: where,
+      attributes: ['id', 'name', 'email', 'resident', 'notify', 'enabled', [sequelize.fn('COUNT', sequelize.col('Cards.uid')), 'CardCount']],
+      group: [sequelize.col('User.id')],
+      include: [{
+        model: models.Card,
+        attributes: []
+      }]
+    }).success(function(users) {
+      res.json(users);
+    }).catch(function(err) {
+      next(err);
+    });
+
+  } else {
+
+    var where;
+    if (req.query.name) {
+      where = ["name LIKE ?", '%'+req.query.name+'%'];
+    }
+
+    models.User.findAll({
+      where: where,
+      include: [ models.Card ]
+    }).then(function(users) {
+      res.json(users);
+    }).catch(function(err) {
+      next(err);
+    });
+
+  }
+
 });
 
 router.get('/users/:user', function(req, res) {

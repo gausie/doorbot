@@ -10,8 +10,11 @@ angular.module('myApp', [
   'angular-loading-bar',
   'ngResource',
   'ngRoute',
+  'ngSanitize',
   'ui.bootstrap',
-  'angularMoment'
+  'ui.select',
+  'angularMoment',
+  'angular-lodash'
 ]).
 config(function ($routeProvider, $locationProvider) {
   $routeProvider.
