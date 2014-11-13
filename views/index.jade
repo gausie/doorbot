@@ -7,7 +7,7 @@ block body
       .container-fluid
 
         .navbar-header
-          button.navbar-toggle.collapsed(type='button', data-toggle='collapse', data-target='#bs-example-navbar-collapse-1')
+          button.navbar-toggle.collapsed(type='button',data-ng-init='isCollapsed = true',data-ng-click='isCollapsed = !isCollapsed')
             span.sr-only Toggle navigation
             span.icon-bar
             span.icon-bar
@@ -16,7 +16,7 @@ block body
             | Doorbot&nbsp;
             i.fa.fa-key
 
-        .collapse.navbar-collapse
+        .collapse.navbar-collapse(data-collapse='isCollapsed')
           ul.nav.navbar-nav
             li(ng-class='{ active: isActive(\'/\', true) }')
               a(href='/') Home
