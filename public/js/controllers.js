@@ -29,9 +29,11 @@ angular.module('myApp.controllers', []).
     };
 
     if ($routeParams.id) {
-      $scope.user = Users.get({
+      var user = Users.get({
         id: $routeParams.id
       }, function() {
+        // Not sure why I can't just do this up there but there you go.
+        $scope.user = user;
         $scope.checkInherited();
       });
     }
