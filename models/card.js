@@ -16,5 +16,10 @@ module.exports = function(sequelize, DataTypes) {
     }
   });
 
+  Card.hook('beforeCreate', function(attributes, options, fn) {
+    attributes.setDataValue('uid', attributes.get('uid').toLowerCase());
+    fn();
+  });
+
   return Card;
 };

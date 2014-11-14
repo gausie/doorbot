@@ -51,7 +51,7 @@ div(data-ng-controller='UserCtrl',data-ng-init='checkInherited()')
 										i.fa.fa-credit-card
 									input.form-control(name="description-{{$index}}",type="text",placeholder="Description",data-ng-model="card.description")
 							div.form-group
-								input.form-control(name="uid-{{$index}}",placeholder="Card ID",type="text",data-ng-model="card.uid")
+								input.form-control(name="uid-{{$index}}",placeholder="Card ID",type="text",data-ng-model="card.uid",data-lowercase)
 							button.btn(type="button",data-ng-click="removeCard(card)")
 								i.fa.fa-trash
 				button.btn(type="button",data-ng-click="addCard()")
