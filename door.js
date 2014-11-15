@@ -4,7 +4,7 @@ var Promise = require('bluebird');
 var gpio = require('gpio');
 var jayson = require('jayson');
 var nodemailer = require('nodemailer');
-var pcsc = require('pcsclite');
+var pcsclite = require('pcsclite');
 
 module.exports = function () {
 
@@ -21,7 +21,7 @@ module.exports = function () {
     }, {});
 
     // Preparing classes
-    var pcsc = pcsc();
+    var pcsc = pcsclite();
     var pin = Promise.promisifyAll(gpio.export(4));
     var json = jayson.client.http(config.jsonrpc);
 
