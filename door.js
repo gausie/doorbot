@@ -22,61 +22,40 @@ module.exports = function () {
 
               reader.connect()
               .then(function (protocol) {
-                return reader.transmit(new Buffer([0xFF, 0xCA, 0x00, 0x00, 0x00]), 40, protocol);
-              }).then(function (data) {
 
-                var status = data.slice(-2);
-                if(status.toString('hex',0,1) != 90){
-                  throw new Error("Reader returned error:" + status);
-                }else{
-                  var uid = data.slice(0,-2).toString('hex').toLowerCase();
+                var reader_transmit = function (buffer_array) {
+                  return reader.transmit(new Buffer(buffer_array), 40, protocol);
+                }
 
-                  models.Card.findOne({
-                    where: {
-                      uid: uid
-                    },
-                    attributes: ['name', 'resident'],
-                    include: [{
-                      model: models.User,
-                      attributes: [],
+                return reader_transmit([0xFF, 0xCA, 0x00, 0x00, 0x00]).then(function (data) {
+
+                  var status = data.slice(-2);
+                  if(status.toString('hex',0,1) != 90){
+                    throw new Error("Reader returned error:" + status);
+                  }else{
+                    var uid = data.slice(0,-2).toString('hex').toLowerCase();
+
+                    models.Card.findOne({
                       where: {
-                        enabled: true
-                      }
-                    }]
-                  }).then(function(entrant) {
+                        uid: uid
+                      },
+                      attributes: ['name', 'resident'],
+                      include: [{
+                        model: models.User,
+                        attributes: [],
+                        where: {
+                          enabled: true
+                        }
+                      }]
+                    }).then(function(entrant) {
 
-                    var status;
+                      actions.run(reader_transmit, entrant, uid);
 
-                    // Did we find someone?
-                    if(entrant) {
-
-                      // Yep!
-                      status = "approved";
-
-                      // Make the reader do a happy beep
-                      reader.transmit(new Buffer([0xFF, 0x00, 0x40, 0xAC, 0x04, 0x09, 0x09, 0x01, 0x01]), 40, protocol, function(){ /* do something in case of failure */ });
-
-                      actions.run(entrant);
-
-                    } else {
-
-                      // Nope
-                      status = "denied";
-
-                      // Make the reader do a sad beep
-                      reader.transmit(new Buffer([0xFF, 0x00, 0x40, 0x5C, 0x04, 0x01, 0x01, 0x04, 0x01]), 40, protocol, function(){ /* do something in case of failure */ });
-
-                    }
-
-                    // Log the activity
-                    models.Log.create({
-                      CardUid: uid,
-                      status: status
                     });
 
-                  });
+                });
 
-                }
+
               }).catch(function(error) {
                 console.error(error);
               });
@@ -90,6 +69,5 @@ module.exports = function () {
   pcsc.on('error', function(error) {
     console.error(error);
   });
-
 
 };

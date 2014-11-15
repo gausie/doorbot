@@ -5,7 +5,9 @@ var Promise = require('bluebird');
 module.exports = {
   name: 'gpio',
   settings: ['pin'],
-  run: function(settings) {
+  run: function(settings, entrant) {
+
+    if (!entrant) return;
 
     var gpio = require('gpio');
 
@@ -18,5 +20,6 @@ module.exports = {
         }, 1000);
       }).catch(reject);
     });
+
   }
 };

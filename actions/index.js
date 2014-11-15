@@ -16,7 +16,7 @@ module.exports = {
 
   },
 
-  run: function(entrant) {
+  run: function(reader, entrant, uid) {
 
     this.getList().then(function(actions) {
 
@@ -33,8 +33,8 @@ module.exports = {
             return p;
           }, {});
 
-          // 'this' will be the details of the entrant (if any)
-          return action.run(settings, entrant, models);
+          return action.run(settings, entrant, models, reader, uid);
+
         });
       }));
 
