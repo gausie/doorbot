@@ -95,7 +95,7 @@ module.exports = function () {
 
                         // Open the door
                         pin.set(1).then(function(){
-                          setTimeout(function(){ pin.set(0) }, 1000);
+                          setTimeout(function(){ pin.set(0); }, 1000);
                         });
 
                       } else {
