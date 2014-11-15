@@ -19,7 +19,7 @@ router.get('/users', function(req, res, next) {
         model: models.Card,
         attributes: []
       }]
-    }).success(function(users) {
+    }).then(function(users) {
       res.json(users);
     }).catch(function(err) {
       next(err);
