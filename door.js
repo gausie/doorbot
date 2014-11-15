@@ -20,14 +20,17 @@ module.exports = function () {
             reader.disconnect();
           } else if ((changes & this.SCARD_STATE_PRESENT) && (status.state & this.SCARD_STATE_PRESENT)) {
 
-              reader.connect()
-              .then(function (protocol) {
+              reader.connect().then(function (protocol) {
 
-                var reader_transmit = function (buffer_array) {
-                  return reader.transmit(new Buffer(buffer_array), 40, protocol);
+                var reader_transmit = function (instruction) {
+                  // Convert hex string into byte array
+                  var byte_array = instruction.match(/(..?)/g).map(function(pair) {
+                    return parseInt(pair, 16);
+                  });
+                  return reader.transmit(new Buffer(byte_array), 40, protocol);
                 }
 
-                return reader_transmit([0xFF, 0xCA, 0x00, 0x00, 0x00]).then(function (data) {
+                return reader_transmit('FFCA000000').then(function (data) {
 
                   var status = data.slice(-2);
                   if(status.toString('hex',0,1) != 90){

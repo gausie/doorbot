@@ -9,10 +9,10 @@ module.exports = {
 
     if (entrant) {
       // Happy beep
-      return reader_transmit([0xFF, 0x00, 0x40, 0xAC, 0x04, 0x09, 0x09, 0x01, 0x01]);
+      return reader_transmit('FF0040AC0409090101');
     } else {
       // Sad beep
-      return reader_transmit([0xFF, 0x00, 0x40, 0x5C, 0x04, 0x01, 0x01, 0x04, 0x01]);
+      return reader_transmit('FF00405C0401010401');
     }
 
   }
