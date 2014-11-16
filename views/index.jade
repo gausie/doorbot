@@ -12,18 +12,20 @@ block body
             span.icon-bar
             span.icon-bar
             span.icon-bar
-          a.navbar-brand(href='#')
+          a.navbar-brand(href='/')
             | Doorbot&nbsp;
             i.fa.fa-key
 
         .collapse.navbar-collapse(data-collapse='isCollapsed')
           ul.nav.navbar-nav
-            li(ng-class='{ active: isActive(\'/\', true) }')
-              a(href='/') Home
             li(ng-class='{ active: isActive(\'/users\') }')
-              a(href='/users') Users
+              a(href='/users')
+                | Users&nbsp;
+                i.fa.fa-users
             li(ng-class='{ active: isActive(\'/logs\') }')
-              a(href='/logs') Logs
+              a(href='/logs')
+                | Logs&nbsp;
+                i.fa.fa-book
 
 
     div(ng-view)
