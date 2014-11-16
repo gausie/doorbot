@@ -6,11 +6,11 @@ module.exports = {
 
   getList: function() {
 
-    return fs.readdir(__dirname).then(function(files) {
+    return fs.readdirAsync(__dirname).then(function(files) {
       return files.filter(function(file) {
         return (file.indexOf(".") !== 0) && (file !== "index.js");
       }).map(function(file) {
-        return require(file);
+        return require('./'+file);
       });
     });
 
