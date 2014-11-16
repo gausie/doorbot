@@ -9,16 +9,21 @@ module.exports = {
 
     if (!entrant) return;
 
-    var gpio = require('gpio');
+    var pin = settings.pin;
+    var gpio = Promise.promisifyAll(require('pi-gpio'));
 
-    return new Promise(function (resolve, reject) {
-      var pin = Promise.promisifyAll(gpio.export(settings.pin));
-      return pin.set(1).then(function(){
+    return gpio.open(pin, "output").then(function() {
+      return gpio.write(pin, 1);
+    }).then(function() {
+      return new Promise(function(r) {
         setTimeout(function(){
-          pin.set(0);
-          resolve();
+          r();
         }, 1000);
-      }).catch(reject);
+      });
+    }).then(function() {
+      return gpio.write(pin, 0);
+    }).then(function() {
+      return gpio.close(16);
     });
 
   }
