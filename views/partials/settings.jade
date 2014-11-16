@@ -1,0 +1,12 @@
+div(ng-controller='SettingsCtrl')
+
+  h1 Settings
+
+  div(data-ng-repeat="(action, keys) in settings")
+    h4
+      i.fa.fa-cog
+      |  {{ action }}
+    ul.list-group
+      li.list-group-item(data-ng-repeat="(key, value) in keys")
+        b {{key}}
+        input(data-ng-model="value")
