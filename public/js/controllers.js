@@ -17,6 +17,9 @@ angular.module('myApp.controllers', []).
   controller('HomeCtrl', function ($scope) {
 
   }).
+  controller('SettingsCtrl', function ($scope, Settings) {
+    $scope.settings = Settings.get();
+  }).
   controller('UserCtrl', function ($scope, $routeParams, $location, Users) {
 
     if (!$scope.user) {

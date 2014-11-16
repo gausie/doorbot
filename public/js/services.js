@@ -10,6 +10,13 @@ angular.module('myApp.services', []).
     });
 
   }]).
+  factory('Settings', ['$resource', function($resource) {
+
+    return $resource('/api/settings', { }, {
+      'update': { method:'PUT' }
+    });
+
+  }]).
   factory('Logs', ['$resource', function($resource) {
 
     return $resource('/api/logs');

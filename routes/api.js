@@ -3,9 +3,39 @@
  */
 var sequelize = require('sequelize');
 var models = require('../models');
+var actions = require('../actions');
 var express = require('express');
 var router = express.Router();
 var _ = require('lodash');
+
+router.get('/settings', function(req, res, next) {
+  actions.getList().then(function(actionlist) {
+    models.Setting.findAll().then(function(settings) {
+
+      // Transform our settings array
+      settings = settings.reduce(function(p, c) {
+        key = c.key.split('.');
+        p[key[0]] = p[key[0]] || {}
+        p[key[0]][key[1]] = c.value;
+        return p;
+      }, {});
+
+      // Add any unfilled settings
+      actionlist.forEach(function(action) {
+        action.settings.forEach(function(key) {
+          if (settings[action.name] === undefined || settings[action.name][key] === undefined) {
+            settings[action.name] = settings[action.name] || {}
+            settings[action.name][key] = '';
+          }
+        });
+      });
+
+      // Return it
+      res.jsonp(settings);
+
+    });
+  });
+});
 
 router.get('/users', function(req, res, next) {
 
