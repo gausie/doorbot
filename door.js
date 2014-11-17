@@ -10,29 +10,40 @@ module.exports = function () {
   var pcsc = pcsclite();
 
   pcsc.on('reader', function (reader) {
+
     reader.on('status', function (status) {
+
       var changes = this.state ^ status.state;
       if (changes) {
         if ((changes & this.SCARD_STATE_EMPTY) && (status.state & this.SCARD_STATE_EMPTY)) {
-          reader.disconnect();
+          reader.disconnect(function() {} );
         } else if ((changes & this.SCARD_STATE_PRESENT) && (status.state & this.SCARD_STATE_PRESENT)) {
 
-          reader.connect(function (protocol) {
+          reader.connect(function (share_mode, protocol) {
 
             // Create a protocol-aware function to transmit APDUs to
             // the reader. We can pass this function to our action
             // modules.
-            var reader_transmit = function (instruction) {
-              // Convert hex string into byte array
-              var byte_array = instruction.match(/(..?)/g).map(function(pair) {
-                return parseInt(pair, 16);
-              });
-              return reader.transmit(new Buffer(byte_array), 40, protocol);
-            };
+            var reader_transmit = (function(protocol) {
+              return function (instruction) {
+                return new Promise(function (resolve, reject) {
+                  // Convert hex string into byte array
+                  var byte_array = instruction.match(/(..?)/g).map(function(pair) {
+                    return parseInt(pair, 16);
+                  });
+                  reader.transmit(new Buffer(byte_array), 40, protocol, function(err, data) {
+                    if(err) {
+                      reject(err);
+                    } else {
+                      resolve(data);
+                    }
+                  });
+                });
+              };
+            })(protocol);
 
             // APDU for GetCardUid
             return reader_transmit('FFCA000000').then(function (data) {
-
               var status = data.slice(-2);
               if(status.toString('hex',0,1) != 90){
                 throw new Error("Reader returned error:" + status);
