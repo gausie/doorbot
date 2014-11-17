@@ -54,15 +54,16 @@ module.exports = function () {
                   where: {
                     uid: uid
                   },
-                  attributes: ['name', 'resident'],
                   include: [{
                     model: models.User,
-                    attributes: [],
+                    attributes: ['name', 'resident'],
                     where: {
                       enabled: true
                     }
                   }]
-                }).then(function(entrant) {
+                }).then(function(Card) {
+
+                  var entrant = (Card) ? Card.User : null;
 
                   actions.run(reader_transmit, entrant, uid);
 
