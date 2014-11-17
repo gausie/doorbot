@@ -9,11 +9,11 @@ module.exports = {
 
     if (!entrant) return;
 
-    var pin = settings.pin;
+    var pin = parseInt(settings.pin);
     var gpio = Promise.promisifyAll(require('pi-gpio'));
 
-    return gpio.open(pin, "output").then(function() {
-      return gpio.write(pin, 1);
+    return gpio.openAsync(pin, "output").then(function() {
+      return gpio.writeAsync(pin, 1);
     }).then(function() {
       return new Promise(function(r) {
         setTimeout(function(){
@@ -21,9 +21,9 @@ module.exports = {
         }, 1000);
       });
     }).then(function() {
-      return gpio.write(pin, 0);
+      return gpio.writeAsync(pin, 0);
     }).then(function() {
-      return gpio.close(16);
+      return gpio.closeAsync(pin);
     });
 
   }
