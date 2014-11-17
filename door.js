@@ -30,9 +30,14 @@ module.exports = function () {
               return function (instruction) {
                 return new Promise(function (resolve, reject) {
                   // Convert hex string into byte array
-                  var byte_array = instruction.match(/(..?)/g).map(function(pair) {
-                    return parseInt(pair, 16);
-                  });
+                  if(Array.isArray(instruction)) {
+                    byte_array = instruction;
+                  }else{
+                    var byte_array = instruction.match(/(..?)/g).map(function(pair) {
+                      return parseInt(pair, 16);
+                    });
+                  }
+
                   reader.transmit(new Buffer(byte_array), 40, protocol, function(err, data) {
                     if(err) {
                       reject(err);
