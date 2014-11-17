@@ -5,12 +5,14 @@ var nodemailer = require('nodemailer');
 
 module.exports = {
   name: 'notify',
-  settings: ['user','pass'],
+  settings: ['user','pass', 'from'],
   run: function(settings, entrant, models) {
 
     if (!entrant) return;
 
     if (!settings.user || !settings.pass) return;
+
+    var from = settings.from || "Doorbot <doorbot@doorbot>";
 
     var transport = Promise.promisifyAll(nodemailer.createTransport("SMTP", {
       auth: {
@@ -25,7 +27,7 @@ module.exports = {
         attributes: ['email']
       }).then( function(recipients) {
         return transport.sendMailAsync({
-          from: "Doorbot <doorbot@***REMOVED***>",
+          from: from,
           to: recipients.join(", "),
           subject: entrant.name + " has opened the door <EOM>",
           text: ""
