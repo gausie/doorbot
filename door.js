@@ -57,7 +57,8 @@ module.exports = function () {
               }else{
 
                 var uid = data.slice(0,-2).toString('hex').toLowerCase();
-                models.Card.findOne({
+
+                return models.Card.findOne({
                   where: {
                     uid: uid
                   },
@@ -72,12 +73,14 @@ module.exports = function () {
 
                   var entrant = (Card) ? Card.User : null;
 
-                  actions.run(reader_transmit, entrant, uid);
+                  return actions.run(reader_transmit, entrant, uid);
 
                 });
 
               }
 
+            }).catch(function(error) {
+              console.error(error);
             });
 
           });
