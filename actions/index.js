@@ -4,7 +4,24 @@ var models = require('../models');
 
 module.exports = {
 
-  getList: function() {
+  start: function() {
+
+    var self = this;
+
+    //Load settings
+    this.loadSettings().then(function(settings) {
+      self._settings = settings;
+    });
+
+    // Load actions
+    this.loadActions().then(function(actions) {
+      self._actions = actions;
+    });
+
+  },
+
+  _actions: [],
+  loadActions: function() {
 
     return fs.readdirAsync(__dirname).then(function(files) {
       return files.filter(function(file) {
@@ -16,29 +33,33 @@ module.exports = {
 
   },
 
-  run: function(reader, entrant, uid) {
+  _settings: {},
+  loadSettings: function() {
+     // Get settings for this action
+    return models.Setting.findAll().then(function(settings) {
 
-    this.getList().then(function(actions) {
-
-      return Promise.all(actions.map(function(action) {
-        // Get settings for this action
-        return models.Setting.findAll({
-          where: ["key LIKE ?", action.name+'%']
-        }).then(function(settings) {
-
-          // Transform array of settings objects into a single object,
-          // stripping the namespace from the keys as we go.
-          settings = settings.reduce(function(p, c) {
-            p[c.key.substring(action.name.length+1)] = c.value;
-            return p;
-          }, {});
-
-          return action.run(settings, entrant, models, reader, uid);
-
-        });
-      }));
+      // Transform our settings array
+      return settings.reduce(function(p, c) {
+        key = c.key.split('.');
+        p[key[0]] = p[key[0]] || {};
+        p[key[0]][key[1]] = c.value;
+        return p;
+      }, {});
 
     });
+  },
+
+  run: function(reader, entrant, uid) {
+
+    var self = this;
+
+    return Promise.all(this._actions.map(function(action) {
+
+      var settings = self._settings[action.name];
+
+      return action.run(settings, entrant, models, reader, uid);
+
+    }));
 
   }
 

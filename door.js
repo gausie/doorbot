@@ -7,6 +7,8 @@ var actions = require('./actions');
 
 module.exports = function () {
 
+  actions.start();
+
   var pcsc = pcsclite();
 
   pcsc.on('reader', function (reader) {
