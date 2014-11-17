@@ -9,6 +9,8 @@ module.exports = {
 
     if (!entrant) return;
 
+    if (!settings.user || !settings.pass) return;
+
     var nodemailer = require('nodemailer');
 
     var transport = Promise.promisifyAll(nodemailer.createTransport("SMTP", {
