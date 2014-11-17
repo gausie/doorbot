@@ -1,6 +1,7 @@
 'use strict';
 
 var Promise = require('bluebird');
+var gpio = Promise.promisifyAll(require('pi-gpio'));
 
 module.exports = {
   name: 'gpio',
@@ -10,7 +11,6 @@ module.exports = {
     if (!entrant) return;
 
     var pin = parseInt(settings.pin);
-    var gpio = Promise.promisifyAll(require('pi-gpio'));
 
     return gpio.openAsync(pin, "output").then(function() {
       return gpio.writeAsync(pin, 1);

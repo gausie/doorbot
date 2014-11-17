@@ -1,6 +1,7 @@
 'use strict';
 
 var Promise = require('bluebird');
+var nodemailer = require('nodemailer');
 
 module.exports = {
   name: 'notify',
@@ -10,8 +11,6 @@ module.exports = {
     if (!entrant) return;
 
     if (!settings.user || !settings.pass) return;
-
-    var nodemailer = require('nodemailer');
 
     var transport = Promise.promisifyAll(nodemailer.createTransport("SMTP", {
       auth: {

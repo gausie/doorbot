@@ -1,6 +1,7 @@
 'use strict';
 
 var Promise = require('bluebird');
+var jayson = require('jayson');
 
 module.exports = {
   name: 'json-rpc',
@@ -10,8 +11,6 @@ module.exports = {
     if (!entrant) return;
 
     if (!settings.server) return;
-
-    var jayson = require('jayson');
 
     var client = Promise.promisifyAll(jayson.client.http(settings.server));
 
