@@ -23,7 +23,7 @@ module.exports = {
         where: { notify: true },
         attributes: ['email']
       }).then( function(recipients) {
-        return transport.sendMail({
+        return transport.sendMailAsync({
           from: "Doorbot <doorbot@***REMOVED***>",
           to: recipients.join(", "),
           subject: entrant.name + " has opened the door <EOM>",

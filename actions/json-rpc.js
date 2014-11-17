@@ -13,7 +13,7 @@ module.exports = {
 
     var client = Promise.promisifyAll(jayson.client.http(settings.server));
 
-    return client.request('GUI.ShowNotification', {
+    return client.requestAsync('GUI.ShowNotification', {
       title: "Doorbot",
       message: (entrant.resident) ? entrant.name + " is home!" : entrant.name + " is here!"
     });
