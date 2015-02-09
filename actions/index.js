@@ -57,9 +57,8 @@ module.exports = {
 
     return Promise.all(this._actions.map(function(action) {
 
-      var settings = self._settings[action.name];
-
-      return action.run(settings, entrant, models, reader, uid);
+      var settings = self._settings[action.name] || {};
+      return result = action.run(settings, entrant, models, reader, uid);
 
     }));
 
