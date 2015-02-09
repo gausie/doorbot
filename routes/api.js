@@ -9,7 +9,7 @@ var router = express.Router();
 var _ = require('lodash');
 
 router.get('/settings', function(req, res, next) {
-  actions.getList().then(function(actionlist) {
+  actions.loadActions().then(function(actionlist) {
     models.Setting.findAll().then(function(settings) {
 
       // Transform our settings array

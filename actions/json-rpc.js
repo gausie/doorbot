@@ -8,9 +8,9 @@ module.exports = {
   settings: ['server'],
   run: function(settings, entrant) {
 
-    if (!entrant) return;
-
     if (!settings.server) return;
+
+    if (!entrant) return;
 
     var client = Promise.promisifyAll(jayson.client.http(settings.server));
 

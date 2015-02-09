@@ -3,7 +3,7 @@
 var Promise = require('bluebird');
 
 module.exports = {
-  name: 'beep',
+  name: 'log',
   settings: [],
   run: function(settings, entrant, models, reader_transmit, carduid) {
 
