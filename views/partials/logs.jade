@@ -16,7 +16,7 @@ div(ng-controller='LogsCtrl',data-ng-init="load()")
           code(data-ng-bind="log.CardUid")
         |  was&nbsp;
         span.label(data-ng-class="{ 'label-success': log.status === 'approved', 'label-danger': log.status === 'denied'}",data-ng-bind="log.status")
-        |  access at <i class="fa fa-clock-o"></i> {{log.createdAt | amDateFormat:'H:s'}}.
+        |  access at <i class="fa fa-clock-o"></i> {{log.createdAt | amDateFormat:'H:mm:ss'}}.
 
   div.text-center
     div(data-pagination,data-ng-model="page",data-total-items="total",data-items-per-page="limit",data-max-size="10")

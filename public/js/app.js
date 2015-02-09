@@ -42,6 +42,10 @@ config(function ($routeProvider, $locationProvider) {
       templateUrl: 'partials/logs',
       controller: 'LogsCtrl'
     }).
+    when('/settings', {
+      templateUrl: 'partials/settings',
+      controller: 'SettingsCtrl'
+    }).
     otherwise({
       redirectTo: '/'
     });
