@@ -6,6 +6,7 @@ var gpio = Promise.promisifyAll(require('pi-gpio'));
 module.exports = {
   name: 'gpio',
   settings: ['pin'],
+  priority: 100,
   run: function(settings, entrant) {
 
     if (!entrant) return;

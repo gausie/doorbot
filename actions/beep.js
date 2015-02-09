@@ -5,6 +5,7 @@ var Promise = require('bluebird');
 module.exports = {
   name: 'beep',
   settings: [],
+  priority: 99,
   run: function(settings, entrant, models, reader_transmit) {
 
     if (entrant) {

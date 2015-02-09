@@ -28,6 +28,8 @@ module.exports = {
         return (file.indexOf(".") !== 0) && (file !== "index.js");
       }).map(function(file) {
         return require('./'+file);
+      }).sort(function(a, b) {
+        return (b.priority || 0) - (a.priority || 0);
       });
     });
 
