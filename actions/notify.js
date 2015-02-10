@@ -22,7 +22,7 @@ module.exports = {
     }));
 
     if(!entrant.resident){
-      models.User.findAll({
+      return models.User.findAll({
         where: { notify: true },
         attributes: ['email']
       }).then( function(recipients) {
