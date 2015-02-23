@@ -1,5 +1,6 @@
 var Promise = require('bluebird');
 var fs = Promise.promisifyAll(require('fs'));
+var workerpool = require('workerpool');
 var models = require('../models');
 
 module.exports = {
@@ -54,13 +55,14 @@ module.exports = {
   run: function(reader, entrant, uid) {
 
     var self = this;
+    var pool = workerpool.pool();
 
     return Promise.all(this._actions.map(function(action) {
-
       var settings = self._settings[action.name] || {};
-      return result = action.run(settings, entrant, models, reader, uid);
-
-    }));
+      return pool.exec(action.run, [settings, entrant, models, reader, uid]);
+    })).then(function() {
+      pool.clear();
+    });
 
   }
 
