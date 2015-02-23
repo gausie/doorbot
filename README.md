@@ -8,6 +8,7 @@ I use it on a Raspberry Pi (Model B) to open the front door of my house via GPIO
 ## Requirements
 * [MongoDB](http://mongodb.org)
 * [PC/SC lite](http://pcsclite.alioth.debian.org/pcsclite.html)
+* [gpio-admin](https://github.com/quick2wire/quick2wire-gpio-admin)
 
 ## My setup
 All files in the `/actions` folder are loaded and run once a card is read. The project comes with the ones I use by way of example.
